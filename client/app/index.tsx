@@ -7,6 +7,7 @@ import {
   Poppins_400Regular,
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const [fontsLoaded] = useFonts({
@@ -17,12 +18,11 @@ export default function Index() {
   if (!fontsLoaded) {
     return null;
   }
-const router  = useRouter();
-   const handleGetStarted = () => {
-  };
+  const router = useRouter();
+  const handleGetStarted = () => {};
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image
         source={require("../assets/images/logo.jpg")}
         style={styles.logoImage}
@@ -54,7 +54,7 @@ const router  = useRouter();
       </Pressable>
 
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
