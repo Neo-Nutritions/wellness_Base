@@ -1,14 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { Image } from "expo-image";
-
+import { useRouter } from "expo-router";
 import {
   useFonts,
   Poppins_400Regular,
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
 
-export default function App() {
+export default function Index() {
   const [fontsLoaded] = useFonts({
     PoppinsRegular: Poppins_400Regular,
     PoppinsSemiBold: Poppins_600SemiBold,
@@ -17,17 +17,20 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+const router  = useRouter();
+   const handleGetStarted = () => {
+  };
 
   return (
     <View style={styles.container}>
       <Image
-        source={require("./assets/images/logo.jpg")}
+        source={require("../assets/images/logo.jpg")}
         style={styles.logoImage}
         contentFit="contain"
       />
 
       <Image
-        source={require("./assets/images/splash_image.png")}
+        source={require("../assets/images/splash_image.png")}
         style={styles.squareImage}
         contentFit="cover"
       />
@@ -45,6 +48,7 @@ export default function App() {
           styles.button,
           pressed && styles.buttonPressed,
         ]}
+        onPress={handleGetStarted}
       >
         <Text style={styles.buttonText}>Get Started</Text>
       </Pressable>
