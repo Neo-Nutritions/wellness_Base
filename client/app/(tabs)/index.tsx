@@ -24,13 +24,13 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <Image
-        source={require("../assets/images/logo.jpg")}
+        source={require("../../assets/images/logo.jpg")}
         style={styles.logoImage}
         contentFit="contain"
       />
 
       <Image
-        source={require("../assets/images/splash_image.png")}
+        source={require("../../assets/images/splash_image.png")}
         style={styles.squareImage}
         contentFit="cover"
       />
@@ -52,8 +52,6 @@ export default function Index() {
       >
         <Text style={styles.buttonText}>Get Started</Text>
       </Pressable>
-
-      <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
