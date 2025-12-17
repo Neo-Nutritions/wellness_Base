@@ -19,7 +19,9 @@ export default function Index() {
     return null;
   }
   const router = useRouter();
-  const handleGetStarted = () => {};
+  const handleGetStarted = () => {
+    router.replace("/(auth)/signup");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
