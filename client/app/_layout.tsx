@@ -8,7 +8,6 @@ import { Platform } from "react-native";
 export default function RootLayout() {
   useEffect(() => {
     if (Platform.OS === "android") {
-      NavigationBar.setBackgroundColorAsync("#ffffff");
       NavigationBar.setButtonStyleAsync("dark"); 
     }
   }, []);
