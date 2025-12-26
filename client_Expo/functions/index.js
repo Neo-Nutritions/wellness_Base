@@ -228,7 +228,6 @@ exports.retryfailedsync = onDocumentCreated('sync_queue/{docId}', async (event) 
       }
     );
 
-    console.log('Retry sync successful:', response.data);
     await snap.ref.delete();
     return { success: true };
   } catch (error) {
