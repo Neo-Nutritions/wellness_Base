@@ -45,3 +45,38 @@ class SubscriptionPlan(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.billing_period})"
+    
+
+class PlanEntitlement(models.Model):
+    """
+    Defines what a plan allows a user to do.
+    Fully dynamic.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    plan = models.ForeignKey(
+        SubscriptionPlan,
+        related_name='entitlements',
+        on_delete=models.CASCADE
+    )
+
+    key = models.CharField(
+        max_length=100,
+        help_text="e.g. book_sessions, ai_access, max_bookings"
+    )
+
+    value = models.JSONField(
+        help_text="true, number, or config object"
+    )
+
+    description = models.CharField(max_length=255, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('plan', 'key')
+        ordering = ['key']
+
+    def __str__(self):
+        return f"{self.plan.slug} → {self.key}"
