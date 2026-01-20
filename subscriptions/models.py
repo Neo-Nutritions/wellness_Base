@@ -29,6 +29,13 @@ class UserSubscription(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     trial_end_date = models.DateTimeField(null=True, blank=True)
 
+    def is_active(self):
+        now = timezone.now()
+        return (
+            self.status in ['active', 'trialing'] and
+            (self.end_date is None or self.end_date > now)
+        )
+
     class Meta:
         ordering = ['-created_at']
         indexes = [
