@@ -1,12 +1,11 @@
 from django.db import models
 import uuid
-from userAuth.models import AppUser
 class BillingRecord(models.Model):
     """
     Represents a billing record for a user.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='billing_records')
+    user = models.OneToOneField('userAuth.AppUser', on_delete=models.CASCADE, related_name='billing_records')
     billing_name = models.CharField(max_length=255)
     email = models.EmailField()
     country_code = models.CharField(max_length=2)
@@ -28,6 +27,9 @@ class BillingRecord(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return f"BillingRecord for {self.user.email} - {self.billing_name}"
