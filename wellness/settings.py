@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'userAuth',
     'rest_framework',
     'plans',
+    'subscriptions',
 ]
 
 MIDDLEWARE = [
