@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from billing.models import BillingRecord
 class Administrator(AbstractUser):
     pass
 
@@ -38,6 +38,18 @@ class AppUser(models.Model):
     # Local timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def get_or_create_billing_profile(self):
+        billing_record, created = BillingRecord.objects.get_or_create(
+            user=self,
+            defaults={
+                'billing_name': self.full_name or 'Unnamed',
+                'email': self.email,
+                'country_code': 'KE',
+                'currency': 'KES',
+            }
+        )
+        return billing_record
 
     def __str__(self):
         return self.email or self.firebase_uid
