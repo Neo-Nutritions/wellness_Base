@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SubscriptionPlan
+from .models import SubscriptionPlan, PlanEntitlement
 
 @admin.register(SubscriptionPlan)
 class SubscriptionPlanAdmin(admin.ModelAdmin):
@@ -23,5 +23,21 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+@admin.register(PlanEntitlement)
+class PlanEntitlementAdmin(admin.ModelAdmin):
+    list_display = ('plan', 'key', 'value', 'description')
+    list_filter = ('plan',)
+    search_fields = ('key', 'description')
+    ordering = ('plan', 'key')
+    readonly_fields = ('created_at',)
+    fieldsets = (
+        (None, {
+            'fields': ('plan', 'key', 'value', 'description')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',)
         }),
     )
