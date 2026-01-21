@@ -42,6 +42,7 @@ class SubscriptionPlan(models.Model):
     highlighted = models.BooleanField(default=False, help_text="If true, this plan is highlighted in the UI.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    features = models.JSONField(default=dict, blank=True, help_text="Key-value pairs of plan features.")
 
     def __str__(self):
         return f"{self.name} ({self.billing_period})"
