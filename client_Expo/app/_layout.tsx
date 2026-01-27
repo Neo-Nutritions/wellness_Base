@@ -2,6 +2,8 @@ import '../global.css';
 import { useAuth, AuthContextProvider } from '../context/authContext';
 import { useSegments, Slot, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
+import { store } from '@/store/slices';
+import { Provider } from 'react-redux';
 const Layout = () => {
   const { isAuthenticated } = useAuth();
   const segments = useSegments();
@@ -20,8 +22,10 @@ const Layout = () => {
 
 export default function RootLayout() {
   return (
-    <AuthContextProvider>
-      <Layout />
-    </AuthContextProvider>
+    <Provider store={store}>
+      <AuthContextProvider>
+        <Layout />
+      </AuthContextProvider>
+    </Provider>
   );
 }
