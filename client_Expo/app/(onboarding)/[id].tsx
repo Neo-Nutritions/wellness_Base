@@ -1,15 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { useAppSelector } from '@/store/hooks';
 import { Ionicons } from '@expo/vector-icons';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import { subscribeToPlan, Subscription } from '@/store/slices/subscriptionSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { processMpesaResponse } from '@/store/slices/mpesaSlice';
+import { useRouter } from 'expo-router';
 export default function PlanDetails() {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const { id } = useLocalSearchParams();
-  const plan = useAppSelector((state) =>
-    state.plans.plans.find((p) => p.id === (id))
-  );
+  const plan = useAppSelector((state) => state.plans.plans.find((p) => p.id === id));
+  async function makeSubscription() {
+    if (!plan) return;
+
+    try {
+      await dispatch(subscribeToPlan(plan.id)).unwrap();
+
+      Alert.alert(
+        'Success',
+        'Subscription created successfully. Do you want to proceed?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Proceed',
+            onPress: () => {
+              const mpesaData = {
+                Body: {
+                  stkCallback: {
+                    CheckoutRequestID: 'ws_CO_123456789',
+                    ResultCode: 0,
+                  },
+                },
+              };
+
+              dispatch(processMpesaResponse(mpesaData));
+              router.replace('/(app)/home');
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      const message = typeof error === 'string' ? error : 'Subscription failed. Please try again.';
+
+      Alert.alert('Subscription Failed', message, [
+        {
+          text: 'OK',
+          style: 'cancel',
+        },
+      ]);
+    }
+  }
 
   if (!plan) {
     return (
@@ -46,9 +95,8 @@ export default function PlanDetails() {
     <View style={[styles.container, { backgroundColor: themeColor }]}>
       {/* Scrollable Features */}
       <ScrollView
-        contentContainerStyle={{ padding: hp(2),paddingTop: hp(6), paddingBottom: hp(12) }}
-        showsVerticalScrollIndicator={false}
-      >
+        contentContainerStyle={{ padding: hp(2), paddingTop: hp(6), paddingBottom: hp(12) }}
+        showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.planName}>{plan.name}</Text>
@@ -78,17 +126,14 @@ export default function PlanDetails() {
           {plan.currency} {plan.price} / {plan.billing_period}
         </Text>
 
-        <View style={{ marginTop: hp(1) }}>
-          {['Card', 'Stripe', 'PayPal', 'M-Pesa'].map((method) => (
-            <TouchableOpacity
-              key={method}
-              style={styles.paymentButton}
-              activeOpacity={0.85}
-              onPress={() => handlePayment(method)}
-            >
-              <Text style={styles.paymentButtonText}>Pay with {method}</Text>
-            </TouchableOpacity>
-          ))}
+        <View>
+          <TouchableOpacity
+            style={styles.paymentButton}
+            onPress={() => handlePayment('Credit Card')}>
+            <Text onPress={makeSubscription} style={styles.paymentButtonText}>
+              Subscribe
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
