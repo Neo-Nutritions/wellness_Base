@@ -1,21 +1,34 @@
 import { View, Text, Pressable } from 'react-native';
-import React from 'react';
+import React,{useState,useEffect, use} from 'react';
 import { useAuth } from '@/context/authContext';
 import '../../global.css';
 import { useRouter } from 'expo-router';
+import {getCurrentUser} from '@/services/api';
 export default function home() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const router = useRouter();
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setUser(await getCurrentUser());
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+    fetchUserProfile();
+  }, [])
   return (
     <View>
       <Text>home</Text>
-      <Text>Full Name {user?.fullname}</Text>
+      <Text>Full Name {user?.full_name}</Text>
       <Text>Email Address {user?.email}</Text>
       <Text>Phone Number {user?.phoneNumber}</Text>
       <Text>Email is verified {user?.emailVerified}</Text>
       <Text onPress={logout}>logout</Text>
       <Text onPress={() => router.push('/')}>Back to landing</Text>
+      <Text onPress={() => router.push('/plans')}>Go to plans</Text>
     </View>
   );
 }
