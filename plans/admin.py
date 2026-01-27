@@ -3,7 +3,7 @@ from .models import SubscriptionPlan, PlanEntitlement
 
 @admin.register(SubscriptionPlan)
 class SubscriptionPlanAdmin(admin.ModelAdmin):
-    list_display = ('name', 'billing_period', 'price', 'currency', 'is_active', 'is_public', 'highlighted', 'sort_order')
+    list_display = ('name', 'billing_period', 'price', 'currency', 'is_active', 'is_public', 'highlighted', 'sort_order','features')
     list_filter = ('billing_period', 'currency', 'is_active', 'is_public', 'highlighted')
     search_fields = ('name', 'slug', 'description')
     ordering = ('sort_order', 'name')
@@ -23,6 +23,9 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at')
+        }),
+        ('Features', {
+            'fields': ('features',)
         }),
     )
 
