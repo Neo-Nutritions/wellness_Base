@@ -1,12 +1,27 @@
-from rest_framework import generics 
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from plans.models import SubscriptionPlan
 from plans.serializers import SubscriptionPlanSerializer
-from rest_framework.permissions import AllowAny
 
 class SubscriptionPlanListView(generics.ListAPIView):
     """
-    API view to list all active subscription plans.
+    List all active public subscription plans.
     """
-    queryset = SubscriptionPlan.objects.filter(is_active=True, is_public=True).order_by('sort_order', 'price')
+    queryset = SubscriptionPlan.objects.filter(
+        is_active=True,
+        is_public=True
+    ).order_by('sort_order', 'price')
     serializer_class = SubscriptionPlanSerializer
     permission_classes = [AllowAny]
+class SubscriptionPlanDetailView(generics.RetrieveAPIView):
+    """
+    Retrieve a specific subscription plan by ID.
+    """
+    queryset = SubscriptionPlan.objects.filter(
+        is_active=True,
+        is_public=True
+    )
+    serializer_class = SubscriptionPlanSerializer
+    permission_classes = [AllowAny]
+    lookup_field = "id"
