@@ -19,4 +19,5 @@ class SubscriptionPlanSerializer(serializers.ModelSerializer):
             'highlighted',
             'created_at',
             'updated_at',
+            'features', 
         ]
