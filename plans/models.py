@@ -31,6 +31,7 @@ class SubscriptionPlan(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='KES')
     billing_period = models.CharField(max_length=10, choices=BILLING_PERIOD_CHOICES, default='monthly')
+    trial_days = models.PositiveIntegerField(default=7)
 
     #Trial
     trial_period_days = models.PositiveIntegerField(default=0, help_text="Number of trial days offered with this plan.")
