@@ -1,9 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import plansReducer from "./plansSlice";
-
+import subscriptionReducer from "./subscriptionSlice";
+import mpesaReducer from "./mpesaSlice";
 export const store = configureStore({
   reducer: {
     plans: plansReducer,
+    subscription: subscriptionReducer,
+    mpesa: mpesaReducer,
   },
 });
 
