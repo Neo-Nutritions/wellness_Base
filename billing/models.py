@@ -5,13 +5,19 @@ class BillingRecord(models.Model):
     """
     Represents a billing record for a user.
     """
+    CURRENCY_CHOICES = [
+        ("KES", "Kenyan Shilling"),
+        ("USD", "US Dollar"),
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField('userAuth.AppUser', on_delete=models.CASCADE, related_name='billing_records')
     billing_name = models.CharField(max_length=255)
     email = models.EmailField()
+    phone_number = models.CharField(max_length=20, blank=True)
     country_code = models.CharField(max_length=2)
     tax_id = models.CharField(max_length=50, blank=True, help_text="Tax ID/ VAT for the billing record")
     is_tax_exempt = models.BooleanField(default=False)
+    currency = models.CharField(max_length=3, default="KES", choices=CURRENCY_CHOICES)
     default_payment_method = models.CharField(
         max_length=50,
         choices=[

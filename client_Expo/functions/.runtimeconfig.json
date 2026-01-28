@@ -1,6 +1,6 @@
 {
   "django": {
-    "base_url": "https://c89eb37858e7.ngrok-free.app",
+    "base_url": "https://fea1e175ddbd.ngrok-free.app",
     "webhook_secret": "9f3c2d5e8a7f4a1c9b2e7d6a0c5f1e3b9a8d7c6e5f4b3a2c1d0e9f8a7b6c5d9a"
   }
 }

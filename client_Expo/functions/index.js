@@ -12,19 +12,20 @@ setGlobalOptions({
 });
 
 // Configuration
-const DJANGO_BASE_URL = process.env.DJANGO_BASE_URL || 'https://c89eb37858e7.ngrok-free.app';
+const DJANGO_BASE_URL = process.env.DJANGO_BASE_URL || 'https://fea1e175ddbd.ngrok-free.app';
 const WEBHOOK_SECRET =
   process.env.WEBHOOK_SECRET || '9f3c2d5e8a7f4a1c9b2e7d6a0c5f1e3b9a8d7c6e5f4b3a2c1d0e9f8a7b6c5d9a';
 function buildUserPayload(firebaseUser, firestoreData = {}) {
+  console.log('uuuuuuuuuuuuuuuuuuuuuuser', firebaseUser);
+  console.log('ddddddddddddddddddddddddddata', firestoreData);
   return {
     uid: firebaseUser.uid,
     email: firebaseUser.email || '',
     email_verified: firebaseUser.emailVerified || false,
-    is_anonymous: firebaseUser.isAnonymous || false,
+    is_anonymous: firebaseUser.providerData?.length === 0,
 
     display_name: firebaseUser.displayName || firestoreData.displayName || '',
-    full_name: firestoreData.full_name || firestoreData.fullname || '',
-
+    full_name: firestoreData.fullName || '',
     phone_number:
       firebaseUser.phoneNumber || firestoreData.phoneNumber || firestoreData.phone || '',
 
@@ -75,7 +76,6 @@ exports.syncuserfromfirestore = onDocumentCreated('users/{userId}', async (event
   }
 });
 
-
 exports.syncuser = onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -108,7 +108,6 @@ exports.syncuser = onRequest(async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 exports.syncallusers = onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
@@ -162,7 +161,6 @@ exports.syncallusers = onRequest(async (req, res) => {
   }
 });
 
-
 exports.deactivateuser = onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -204,7 +202,6 @@ exports.deactivateuser = onRequest(async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 exports.retryfailedsync = onDocumentCreated('sync_queue/{docId}', async (event) => {
   const snap = event.data;

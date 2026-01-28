@@ -31,6 +31,7 @@ class SubscriptionPlan(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='KES')
     billing_period = models.CharField(max_length=10, choices=BILLING_PERIOD_CHOICES, default='monthly')
+    trial_days = models.PositiveIntegerField(default=7)
 
     #Trial
     trial_period_days = models.PositiveIntegerField(default=0, help_text="Number of trial days offered with this plan.")
@@ -42,6 +43,7 @@ class SubscriptionPlan(models.Model):
     highlighted = models.BooleanField(default=False, help_text="If true, this plan is highlighted in the UI.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    features = models.JSONField(default=dict, blank=True, help_text="Key-value pairs of plan features.")
 
     def __str__(self):
         return f"{self.name} ({self.billing_period})"
